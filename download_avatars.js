@@ -4,9 +4,11 @@ var token = require ('./secrets.js');
 var repoOwnerReal = process.argv[2];
 var repoNameReal = process.argv[3];
 
+
 console.log('Welcome to the GitHub Avatar Downloader!');
 
 function getRepoContributors(repoOwner, repoName, cb) {
+  if (repoName || repoOwner) {
   var options = {
     url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
     headers: {
@@ -19,15 +21,20 @@ function getRepoContributors(repoOwner, repoName, cb) {
     var jsonN = JSON.parse(body);
     cb(err, jsonN);
   });
+  } else {
+    console.log("Please, provide full info");
+  }
 }
 
 function downloadImageByURL(url, filePath) {
   request.get(url)               // Note 1
-       .on('error', function (err) {                                   // Note 2
+    .on('error', function (err) {                                   // Note 2
          throw err;
-       })
-       .pipe(fs.createWriteStream(filePath));
+      })
+    .pipe(fs.createWriteStream(filePath));
 }
+
+
 
 getRepoContributors(repoOwnerReal, repoNameReal, function(err, result) {
   if (err){
