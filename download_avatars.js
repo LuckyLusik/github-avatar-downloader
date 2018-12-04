@@ -8,6 +8,8 @@ var repoNameReal = process.argv[3];
 console.log('Welcome to the GitHub Avatar Downloader!');
 
 function getRepoContributors(repoOwner, repoName, cb) {
+
+  //Checking if full info was entered
   if (repoName || repoOwner) {
   var options = {
     url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
@@ -17,6 +19,7 @@ function getRepoContributors(repoOwner, repoName, cb) {
     }
   };
 
+//Request description
   request(options, function(err, res, body) {
     var jsonN = JSON.parse(body);
     cb(err, jsonN);
@@ -26,6 +29,7 @@ function getRepoContributors(repoOwner, repoName, cb) {
   }
 }
 
+//Making HTTP GET request to download each of the profile images
 function downloadImageByURL(url, filePath) {
   request.get(url)               // Note 1
   .on('error', function (err) {                                   // Note 2
@@ -34,8 +38,7 @@ function downloadImageByURL(url, filePath) {
   .pipe(fs.createWriteStream(filePath));
 }
 
-
-
+//Calling getRepoContributors() with callback function
 getRepoContributors(repoOwnerReal, repoNameReal, function(err, result) {
   if (err){
     console.log("Errors:", err);
