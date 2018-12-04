@@ -28,10 +28,10 @@ function getRepoContributors(repoOwner, repoName, cb) {
 
 function downloadImageByURL(url, filePath) {
   request.get(url)               // Note 1
-    .on('error', function (err) {                                   // Note 2
+  .on('error', function (err) {                                   // Note 2
          throw err;
-      })
-    .pipe(fs.createWriteStream(filePath));
+  })
+  .pipe(fs.createWriteStream(filePath));
 }
 
 
